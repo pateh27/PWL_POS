@@ -11,13 +11,15 @@
                 <th>Username</th>
                 <th>Nama</th>
                 <th>ID Level Pengguna</th>
+                <th>Jumlah Pengguna</th>
             </tr>
-            @foreach ($data as $d)
+                @foreach ($data as $d )
             <tr>
                 <td>{{ $data->user_id }}</td>
                 <td>{{ $data->username }}</td>
                 <td>{{ $data->nama }}</td>
                 <td>{{ $data->level_id }}</td>
+                <td>{{ $data }}</td> 
             </tr>
             @endforeach
         </table>
