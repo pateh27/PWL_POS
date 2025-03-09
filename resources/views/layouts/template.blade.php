@@ -15,7 +15,7 @@
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
 <div class="wrapper">
-  <!-- Navbar -->
+  <!-- Navbar --> 
   @include('layouts.header')
   <!-- /.navbar -->
 
@@ -42,7 +42,7 @@
     @yield('content')
     <!-- /.card -->
 
-    </section>
+    
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
