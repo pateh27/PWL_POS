@@ -8,13 +8,15 @@ use App\Http\Controllers\WelcomeController;
 
 Route::get('/', [WelcomeController::class, 'index']);
 
-Route::group(['prefix'=>'user'], function(){
+Route::group(['prefix' => 'user'], function() {
     Route::get('/', [UserController::class, 'index']);
-    Route::get('/tambah', [UserController::class, 'tambah']);
-    Route::get('/tambah_simpan', [UserController::class, 'tambah_simpan']);
-    Route::get('/ubah/{id}', [UserController::class, 'ubah']);
-    Route::get('/ubah_simpan/{id}',[UserController::class, 'ubah_simpan']) -> name('user.ubah_simpan');
-    Route::get('/hapus/{id}', [UserController::class, 'hapus']);
+    Route::post('/list', [UserController::class, 'list']);
+    Route::get('/create', [UserController::class, 'create']);
+    Route::post('/', [UserController::class, 'store']);
+    Route::get('/{id}', [UserController::class, 'show']);
+    Route::get('/{id}/edit', [UserController::class, 'edit']); 
+    Route::put('/{id}', [UserController::class, 'update']);
+    Route::delete('/{id}', [UserController::class, 'destroy']);
 });
 
 // Route::get('/level',[LevelController::class, 'index']);
