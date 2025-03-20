@@ -33,15 +33,13 @@
                     <i class="nav-icon far fa-user"></i>
                     <p>Data User</p>
                 </a>
-            </li>
-            
-            <li class="nav-header">Data Barang</li>
+            </li> 
             <li class="nav-item">
-                <a href="{{ url('/kategori') }}" class="nav-link {{ ($activeMenu == 'kategori')? 'active' : '' }}">
-                    <i class="nav-icon far fa-bookmark"></i>
-                    <p>Kategori Barang</p>
+                <a href="{{ url('/supplier') }}" class="nav-link {{ ($activeMenu == 'supplier') ? 'active' : ''}}">
+                  <i class="nav-icon fas fa-truck"></i>
+                  <p>Supplier</p>
                 </a>
-            </li>
+              </li>
             <li class="nav-item">
                 <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 'barang')? 'active' : '' }}">
                     <i class="nav-icon far fa-list-alt"></i>
