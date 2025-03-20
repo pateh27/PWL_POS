@@ -28,3 +28,14 @@ Route::group(['prefix' => 'user'], function() {
 // Route::get('/user/ubah_simpan/{id}',[UserController::class, 'ubah_simpan']) -> name('user.ubah_simpan');
 // Route::get('/user/hapus/{id}', [UserController::class, 'hapus']);
 // Route::get('/', [WelcomeController::class, 'index']);
+
+Route::group(['prefix' => 'level'], function() {
+    Route::get('/', [LevelController::class, 'index']);
+     Route::post('/list', [LevelController::class, 'list']);
+     Route::get('/create', [LevelController::class, 'create']);
+     Route::post('/', [LevelController::class, 'store']);
+     Route::get('/{id}', [LevelController::class, 'show']);
+     Route::get('/{id}/edit', [LevelController::class, 'edit']); 
+     Route::put('/{id}', [LevelController::class, 'update']);
+     Route::delete('/{id}', [LevelController::class, 'destroy']);
+});
