@@ -82,16 +82,16 @@ class LevelController extends Controller
     }
 
     public function create_ajax() {
-        $level = levelModel::all();
+        $level = LevelModel::all();
 
-        return view('level.create_ajax', ['level' => $level]);  
+        return view('level.create_ajax', ['level' => $level]);
     }
 
     public function store_ajax(Request $request) {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
                 'level_kode' => 'required|string|max:3|regex:/^[A-Z]+$/',
-                'level_nama' => 'required|string|min:3|max:50|regex:/^[A-Za-z\s]+$/'
+                'level_nama' => 'required|string|min:3|max:50|regex:/^[a-zA-Z\s]+$/'
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -112,7 +112,6 @@ class LevelController extends Controller
         }
         redirect('/');
     }
-
     public function show(string $id) {
         $level = LevelModel::find($id);
 
