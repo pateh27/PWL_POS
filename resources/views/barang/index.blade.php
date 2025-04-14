@@ -120,7 +120,7 @@
              });
  
              $('#kategori_id').on('change', function() {
-                 databarang.ajax.reload();
+                 dataBarang.ajax.reload();
              });
  
          });
