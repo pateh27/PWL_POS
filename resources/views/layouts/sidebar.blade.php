@@ -40,6 +40,12 @@
                   <p>Supplier</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{ url('/kategori') }}" class="nav-link {{ ($activeMenu == 'barang')? 'active' : '' }}">
+                    <i class="nav-icon far fa-bookmark"></i>
+                    <p>Kategori Barang</p>
+                </a>
+            </li>
             <li class="nav-item">
                 <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 'barang')? 'active' : '' }}">
                     <i class="nav-icon far fa-list-alt"></i>
