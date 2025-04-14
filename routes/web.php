@@ -70,6 +70,7 @@ Route::group(['prefix' => 'supplier'], function() {
     Route::get('/create', [SupplierController::class, 'create']);
     Route::post('/', [SupplierController::class, 'store']);
     Route::get('/{id}', [SupplierController::class, 'show']);
+    Route::get('/{id}/show_ajax', [SupplierController::class, 'show_ajax']);
     Route::get('/create_ajax', [SupplierController::class, 'create_ajax']);
     Route::post('/ajax', [SupplierController::class, 'store_ajax']);
     Route::get('/{id}/edit', [SupplierController::class, 'edit']); 
