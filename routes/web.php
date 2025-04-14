@@ -14,6 +14,8 @@ Route::pattern('id', '[0-9]');
  Route::get('login', [AuthController::class, 'login'])->name('login');
  Route::post('login', [AuthController::class, 'postLogin']);
  Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+ Route::get('register', [AuthController::class, 'register']);
+ Route::post('postRegister', [AuthController::class, 'postRegister']);
  
  Route::middleware(['auth'])->group(function(){
 
