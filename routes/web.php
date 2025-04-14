@@ -28,16 +28,6 @@ Route::group(['prefix' => 'user'], function() {
     Route::delete('/{id}', [UserController::class, 'destroy']);
 });
 
-// Route::get('/level',[LevelController::class, 'index']);
-// Route::get('/kategori', [KategoriController::class, 'index']);
-// Route::get('/user',[UserController::class, 'index']);
-// Route::get('/user/tambah', [UserController::class, 'tambah']);
-// Route::get('/user/tambah_simpan', [UserController::class, 'tambah_simpan']);
-// Route::get('/user/ubah/{id}', [UserController::class, 'ubah']);
-// Route::get('/user/ubah_simpan/{id}',[UserController::class, 'ubah_simpan']) -> name('user.ubah_simpan');
-// Route::get('/user/hapus/{id}', [UserController::class, 'hapus']);
-// Route::get('/', [WelcomeController::class, 'index']);
-
 Route::group(['prefix' => 'level'], function() {
     Route::get('/', [LevelController::class, 'index']);
      Route::post('/list', [LevelController::class, 'list']);
@@ -46,6 +36,7 @@ Route::group(['prefix' => 'level'], function() {
      Route::get('/create_ajax', [LevelController::class, 'create_ajax']);
      Route::post('/ajax', [LevelController::class, 'store_ajax']);
      Route::get('/{id}', [LevelController::class, 'show']);
+     Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax']);
      Route::get('/{id}/edit', [LevelController::class, 'edit']); 
      Route::put('/{id}', [LevelController::class, 'update']);
      Route::get('/{id}/edit_ajax', [LevelController::class, 'edit_ajax']);
