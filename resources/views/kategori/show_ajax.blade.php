@@ -1,4 +1,4 @@
-@empty($user)
+@empty($kategori)
      <div id="modal-master" class="modal-dialog modal-lg" role="document">
          <div class="modal-content">
              <div class="modal-header">
@@ -12,7 +12,7 @@
                      <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5>
                      Data yang anda cari tidak ditemukan
                  </div>
-                 <a href="{{ url('/user') }}" class="btn btn-warning">Kembali</a>
+                 <a href="{{ url('/kategori') }}" class="btn btn-warning">Kembali</a>
              </div>
          </div>
      </div>
@@ -20,7 +20,7 @@
          <div id="modal-master" class="modal-dialog modal-lg" role="document">
              <div class="modal-content">
                  <div class="modal-header">
-                     <h5 class="modal-title" id="exampleModalLabel">Detail Data User</h5>
+                     <h5 class="modal-title" id="exampleModalLabel">Detail Data kategori</h5>
                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                          <span aria-hidden="true">&times;</span>
                      </button>
@@ -28,20 +28,16 @@
                  <div class="modal-body">
                      <table class="table table-sm table-bordered table-striped">
                          <tr>
-                            <th class="text-right col-3">ID User :</th>
-                            <td class="col-9">{{ $user->user_id }}</td>
+                             <th class="text-right col-3">ID kategori :</th>
+                             <td class="col-9">{{ $kategori->kategori_id }}</td>
                          </tr>
                          <tr>
-                             <th class="text-right col-3">Level Pengguna :</th>
-                             <td class="col-9">{{ $user->level->level_nama }}</td>
-                         </tr>
-                         <tr>
-                             <th class="text-right col-3">Username :</th>
-                             <td class="col-9">{{ $user->username }}</td>
+                             <th class="text-right col-3">Kode kategori :</th>
+                             <td class="col-9">{{ $kategori->kategori_kode }}</td>
                          </tr>
                          <tr>
                              <th class="text-right col-3">Nama :</th>
-                             <td class="col-9">{{ $user->nama }}</td>
+                             <td class="col-9">{{ $kategori->kategori_nama }}</td>
                          </tr>
                      </table>
                  </div>
