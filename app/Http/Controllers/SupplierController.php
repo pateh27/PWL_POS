@@ -7,6 +7,7 @@
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Yajra\DataTables\Facades\DataTables;
  class SupplierController extends Controller
  {
@@ -371,5 +372,58 @@ use Yajra\DataTables\Facades\DataTables;
         }
     
         return redirect('/');
+     }
+
+     public function export_excel()
+     {
+         // ambil data supplier yang akan di export
+         $supplier = SupplierModel::select('supplier_kode', 'supplier_nama', 'supplier_alamat')
+             ->get();
+ 
+         // load library excel
+         $spreadsheet = new Spreadsheet();
+         $sheet = $spreadsheet->getActiveSheet(); // ambil sheet yang aktif
+ 
+         $sheet->setCellValue('A1', 'No');
+         $sheet->setCellValue('B1', 'Kode Supplier');
+         $sheet->setCellValue('C1', 'Nama Supplier');
+         $sheet->setCellValue('D1', 'Alamat Supplier');
+ 
+ 
+         $sheet->getStyle('A1:D1')->getFont()->setBold(true); // bold header
+ 
+         $no = 1; // nomor data dimulai dari 1
+         $baris = 2; // baris data dimulai dari baris ke 2
+ 
+         foreach ($supplier as $key => $value) {
+             $sheet->setCellValue('A' . $baris, $no);
+             $sheet->setCellValue('B' . $baris, $value->supplier_kode);
+             $sheet->setCellValue('C' . $baris, $value->supplier_nama);
+             $sheet->setCellValue('D' . $baris, $value->supplier_alamat);
+ 
+             $baris++;
+             $no++;
+         }
+ 
+         foreach (range('A', 'F') as $columnID) {
+             $sheet->getColumnDimension($columnID)->setAutoSize(true); // set auto size untuk kolom
+         }
+ 
+         $sheet->setTitle('Data Supplier'); // set title sheet
+ 
+         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+         $filename = 'Data Supplier ' . date('Y-m-d H:i:s') . '.xlsx';
+ 
+         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+         header('Content-Disposition: attachment;filename="' . $filename . '"');
+         header('Cache-Control: max-age=0');
+         header('Cache-Control: max-age=1');
+         header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+         header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+         header('Cache-Control: cache, must-revalidate');
+         header('Pragma: public');
+ 
+         $writer->save('php://output');
+         exit;
      }
  }
