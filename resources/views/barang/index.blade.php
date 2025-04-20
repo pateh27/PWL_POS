@@ -5,11 +5,11 @@
         <div class="card-header">
             <h3 class="card-title">Daftar barang</h3>
             <div class="card-tools">
-                <button onclick="modalAction('{{ url('/barang/import') }}')" class="btn btn-info">Import Barang</button>
-                <a href="{{ url('/barang/export_excel') }}" class="btn btn-primary"><i class="fa fa-fileexcel"></i> Export Barang</a>
-                <a href="{{ url('/barang/export_pdf') }}" class="btn btn-warning"><i class="fa fa-filepdf"></i> Export Barang Pdf</a>
-                <a href="{{ url('/barang/create') }}" class="btn btn-primary">Tambah Data</a>
-                <button onclick="modalAction('{{ url('/barang/create_ajax') }}')" class="btn btn-success">Tambah Data (Ajax)</button>
+                <button onclick="modalAction('{{ url('/barang/import') }}')" class="btn btn-info btn-sm btn-primary mt-1">Import Barang</button>
+                <a href="{{ url('/barang/export_excel') }}" class="btn btn-primary btn-sm mt-1"><i class="fa fa-fileexcel"></i> Export Barang</a>
+                <a href="{{ url('/barang/export_pdf') }}" class="btn btn-warning btn-sm btn-primary mt-1"><i class="fa fa-filepdf"></i> Export Barang Pdf</a>
+                <a href="{{ url('/barang/create') }}" class="btn btn-primary btn-sm mt-1">Tambah Data</a>
+                <button onclick="modalAction('{{ url('/barang/create_ajax') }}')" class="btn btn-success btn-sm btn-primary mt-1">Tambah Data (Ajax)</button>
             </div>
         </div>
         <div class="card-body">

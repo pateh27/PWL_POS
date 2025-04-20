@@ -3,7 +3,8 @@
  namespace App\Http\Controllers;
  
  use App\Models\SupplierModel;
- use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -425,5 +426,17 @@ use Yajra\DataTables\Facades\DataTables;
  
          $writer->save('php://output');
          exit;
+     }
+     public function export_pdf() 
+     {
+         $supplier = supplierModel::select('supplier_kode', 'supplier_nama', 'supplier_alamat')
+             ->get();
+ 
+         $pdf = Pdf::loadView('supplier.export_pdf', ['supplier' => $supplier]);
+         $pdf->setPaper('a4', 'portrait');
+         $pdf->setOption("isRemoteEnabled", true);
+         $pdf->render();
+ 
+         return $pdf->stream('Data Supplier ' .date('Y-m-d H:i:s').'.pdf');
      }
  }

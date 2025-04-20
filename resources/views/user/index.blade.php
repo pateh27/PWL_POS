@@ -5,10 +5,11 @@
          <div class="card-header">
              <h3 class="card-title">{{ $page->title }}</h3>
              <div class="card-tools">
-                <button onclick="modalAction('{{ url('user/import') }}')" class="btn btn-sm btn-info mt-1">Import User</button>
-                 <a class="btn btn-sm btn-primary mt-1" href="{{ url('user/export_excel') }}"><i class="fa fa-file-excel"> Export User</i></a>
-                 <a class="btn btn-sm btn-primary mt-1" href="{{ url('user/create') }}">Tambah</a>
-                 <button onclick="modalAction('{{ url('user/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>         
+                <button onclick="modalAction('{{ url('/user/import') }}')" class="btn btn-info btn-sm btn-primary mt-1">Import user</button>
+                <a href="{{ url('/user/export_excel') }}" class="btn btn-primary btn-sm mt-1"><i class="fa fa-fileexcel"></i> Export user</a>
+                <a href="{{ url('/user/export_pdf') }}" class="btn btn-warning btn-sm btn-primary mt-1"><i class="fa fa-filepdf"></i> Export user Pdf</a>
+                <a href="{{ url('/user/create') }}" class="btn btn-primary btn-sm mt-1">Tambah Data</a>
+                <button onclick="modalAction('{{ url('/user/create_ajax') }}')" class="btn btn-success btn-sm btn-primary mt-1">Tambah Data (Ajax)</button>         
              </div>
          </div>
          <div class="card-body">
