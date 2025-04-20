@@ -1,12 +1,14 @@
 <?php
  
- namespace App\Http\Controllers;
+namespace App\Http\Controllers;
  
- use App\Models\BarangModel;
- use App\Models\KategoriModel;
- use Illuminate\Http\Request;
- use Illuminate\Support\Facades\Validator;
- use Yajra\DataTables\Facades\DataTables;
+use App\Models\BarangModel;
+use App\Models\KategoriModel;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Yajra\DataTables\Facades\DataTables;
  
  class BarangController extends Controller
  {
@@ -278,4 +280,117 @@
         }
         return redirect('/');
     }
- }
+
+    public function import() {
+        return view('barang.import');
+    }
+
+    public function import_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'file_barang' => ['required', 'mimes:xlsx', 'max:1024']
+            ];
+    
+            $validator = Validator::make($request->all(), $rules);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi Gagal',
+                    'msgField' => $validator->errors()
+                ]);
+            }
+    
+            $file = $request->file('file_barang');
+    
+            Log::info('Debug Upload', [
+                'isUploaded' => $request->hasFile('file_barang'),
+                'file' => $file,
+                'real_path' => $file ? $file->getRealPath() : 'null'
+            ]);
+    
+            try {
+                // Gunakan getRealPath() untuk mendapatkan path lengkap ke file sementara
+                $fullPath = $file->getRealPath();
+                
+                // Atau buat direktori custom dan pindahkan file
+                $customDir = storage_path('app/temp');
+                if (!file_exists($customDir)) {
+                    mkdir($customDir, 0755, true);
+                }
+                
+                $customFilePath = $customDir . '/' . $file->getClientOriginalName();
+                // Salin file ke direktori custom
+                copy($fullPath, $customFilePath);
+                
+                $reader = IOFactory::createReader('Xlsx');
+                $reader->setReadDataOnly(true);
+                // Gunakan path file kustom
+                $spreadsheet = $reader->load($customFilePath);
+                $sheet = $spreadsheet->getActiveSheet();
+    
+                $data = $sheet->toArray(null, false, true, true);
+    
+                // Hapus file temporary custom setelah selesai
+                if (file_exists($customFilePath)) {
+                    unlink($customFilePath);
+                }
+    
+                $insert = [];
+                
+                if (count($data) > 1) {
+                    foreach ($data as $baris => $value) {
+                        if ($baris > 1) {
+                            $insert[] = [
+                                'kategori_id'  => $value['A'],
+                                'barang_kode'  => $value['B'],
+                                'barang_nama'  => $value['C'],
+                                'harga_beli'   => $value['D'],
+                                'harga_jual'   => $value['E'],
+                                'created_at'   => now(),
+                            ];
+                        }
+                    }
+    
+                    if (count($insert) > 0) {
+                        $insertResult = BarangModel::insertOrIgnore($insert);
+    
+                        if (!$insertResult) {
+                            Log::error('Gagal menyisipkan data ke database.', [
+                                'data' => $insert,
+                                'error' => 'Data tidak berhasil dimasukkan.'
+                            ]);
+    
+                            return response()->json([
+                                'status'  => false,
+                                'message' => 'Gagal menyisipkan data ke database.'
+                            ]);
+                        }
+                    }
+    
+                    return response()->json([
+                        'status'  => true,
+                        'message' => 'Data berhasil diimpor'
+                    ]);
+                } else {
+                    return response()->json([
+                        'status'  => false,
+                        'message' => 'Tidak ada data yang diimpor'
+                    ]);
+                }
+            } catch (\Exception $e) {
+                Log::error('Error saat memproses file Excel.', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+                return response()->json([
+                    'status'  => false,
+                    'message' => 'Terjadi kesalahan saat memproses file: ' . $e->getMessage()
+                ]);
+            }
+        }
+    
+        return redirect('/');
+     }
+}

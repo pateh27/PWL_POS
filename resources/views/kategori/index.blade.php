@@ -5,6 +5,7 @@
          <div class="card-header">
              <h3 class="card-title">{{ $page->title }}</h3>
              <div class="card-tools">
+                 <button onclick="modalAction('{{ url('kategori/import') }}')" class="btn btn-sm btn-info mt-1">Import Barang</button>
                  <a class="btn btn-sm btn-primary mt-1" href="{{ url('kategori/create') }}">Tambah</a>
                  <button onclick="modalAction('{{ url('kategori/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
              </div>
@@ -28,8 +29,7 @@
              </table>
          </div>
      </div>
-     <div id="myModal" class="modal fade animate shake" tabindex="-1" 
-     role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true">
+      <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" data-width="75%" aria-hidden="true"></div>
      </div>
  @endsection
  
@@ -43,9 +43,11 @@
                $('#myModal').modal('show');
             });
         }
+        var tableKategori;
          $(document).ready(function() {
-                 dataKategori = $('#table_kategori').DataTable({
-                 serverSide: true,
+                dataKategori = $('#table_kategori').DataTable({
+                processing: true, 
+                serverSide: true,
                  ajax: {
                      "url": "{{ url('kategori/list') }}",
                      "dataType": "json",
@@ -76,6 +78,14 @@
                      orderable: false,
                      searchable: false
                  }]
+             });
+             $('#table-kategori_filter input').unbind().bind().on('keyup', function(e) {
+                 if (e.keyCode == 13) { // enter key
+                     tableKategori.search(this.value).draw();
+                 }
+             });
+             $('.filter_kategori').change(function() {
+                 tableKategori.draw();
              });
          });
      </script>
