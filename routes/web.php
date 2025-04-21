@@ -11,13 +11,15 @@ use App\Http\Controllers\BarangController;
 
 Route::pattern('id', '[0-9]+');
  
- Route::get('login', [AuthController::class, 'login'])->name('login');
- Route::post('login', [AuthController::class, 'postLogin']);
- Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
- Route::get('register', [AuthController::class, 'register']);
- Route::post('postRegister', [AuthController::class, 'postRegister']);
+Route::get('login', [AuthController::class, 'login'])->name('login');
+Route::post('login', [AuthController::class, 'postLogin']);
+Route::get('logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::get('register', [AuthController::class, 'register']);
+Route::post('postRegister', [AuthController::class, 'postRegister']);
+Route::get('profile', [AuthController::class, 'profile'])->middleware('auth')->name('profile');
+Route::post('profile/update', [AuthController::class, 'update'])->middleware('auth');
  
- Route::middleware(['auth'])->group(function(){
+Route::middleware(['auth'])->group(function(){
 
 Route::get('/', [WelcomeController::class, 'index']);
 
@@ -46,26 +48,26 @@ Route::middleware(['authorize:ADM'])->group(function(){
 });
 
 Route::group(['prefix' => 'level'], function() {
-    Route::middleware(['authorize:ADM'])->group(function() {
+Route::middleware(['authorize:ADM'])->group(function() {
     Route::get('/', [LevelController::class, 'index']);
-     Route::post('/list', [LevelController::class, 'list']);
-     Route::get('/create', [LevelController::class, 'create']);
-     Route::post('/', [LevelController::class, 'store']);
-     Route::get('/create_ajax', [LevelController::class, 'create_ajax']);
-     Route::post('/ajax', [LevelController::class, 'store_ajax']);
-     Route::get('/{id}', [LevelController::class, 'show']);
-     Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax']);
-     Route::get('/{id}/edit', [LevelController::class, 'edit']); 
-     Route::put('/{id}', [LevelController::class, 'update']);
-     Route::get('/{id}/edit_ajax', [LevelController::class, 'edit_ajax']);
-     Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax']);
-     Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']);
-     Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);
-     Route::delete('/{id}', [LevelController::class, 'destroy']);
-     Route::get('/import', [LevelController::class, 'import']);
-     Route::post('/import_ajax', [LevelController::class, 'import_ajax']);
-     Route::get('/export_excel', [LevelController::class, 'export_excel']);
-     Route::get('/export_pdf', [LevelController::class, 'export_pdf']);
+    Route::post('/list', [LevelController::class, 'list']);
+    Route::get('/create', [LevelController::class, 'create']);
+    Route::post('/', [LevelController::class, 'store']);
+    Route::get('/create_ajax', [LevelController::class, 'create_ajax']);
+    Route::post('/ajax', [LevelController::class, 'store_ajax']);
+    Route::get('/{id}', [LevelController::class, 'show']);
+    Route::get('/{id}/show_ajax', [LevelController::class, 'show_ajax']);
+    Route::get('/{id}/edit', [LevelController::class, 'edit']); 
+    Route::put('/{id}', [LevelController::class, 'update']);
+    Route::get('/{id}/edit_ajax', [LevelController::class, 'edit_ajax']);
+    Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax']);
+    Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']);
+    Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);
+    Route::delete('/{id}', [LevelController::class, 'destroy']);
+    Route::get('/import', [LevelController::class, 'import']);
+    Route::post('/import_ajax', [LevelController::class, 'import_ajax']);
+    Route::get('/export_excel', [LevelController::class, 'export_excel']);
+    Route::get('/export_pdf', [LevelController::class, 'export_pdf']);
 });
 });
 

@@ -13,7 +13,7 @@
  
      protected $table = 'm_user'; 
      protected $primaryKey = 'user_id';
-     protected $fillable = ['level_id', 'username', 'nama', 'password', 'created_at', 'updated_at'];
+     protected $fillable = ['level_id', 'username', 'nama', 'password', 'created_at', 'updated_at', 'profile_picture'];
      protected $hidden = ['password'];
      protected $casts = ['password' => 'hashed'];
  
