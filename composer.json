@@ -11,6 +11,7 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+        "midtrans/midtrans-php": "^2.6",
         "phpoffice/phpspreadsheet": "^4.1",
         "yajra/laravel-datatables": "10.0"
     },
@@ -66,4 +67,6 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true
+
+    
 }
