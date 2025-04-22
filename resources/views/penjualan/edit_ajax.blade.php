@@ -151,13 +151,14 @@
         $.ajax({
             url: $('#form-penjualan-edit').attr('action'),
             method: 'POST',
-            data: data,
+            data: JSON.stringify(data), // ubah ke JSON string
+            contentType: 'application/json', // tambahkan ini
             success: function (res) {
-                if (res.status) {
-                    Swal.fire('Berhasil', res.message, 'success').then(() => location.reload());
-                } else {
-                    Swal.fire('Peringatan', res.message, 'warning');
-                }
+            if (res.status) {
+                Swal.fire('Berhasil', res.message, 'success').then(() => location.reload());
+            } else {
+                Swal.fire('Peringatan', res.message, 'warning');
+            }
             },
             error: function (xhr) {
                 let msg = xhr.responseJSON?.message || 'Terjadi kesalahan.';

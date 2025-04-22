@@ -174,93 +174,89 @@ class PenjualanController extends Controller
         return redirect('/');
     }
 
+    
     public function store_ajax(Request $request)
     {
-        if (!$request->ajax() && !$request->wantsJson()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Permintaan tidak valid.'
-            ]);
-        }
-    
-        $rules = [
-            'pembeli' => 'required|string|max:255',
-            'penjualan_tanggal' => 'required|date',
-            'barang' => 'required|array|min:1',
-            'barang.*.id' => 'required|exists:m_barang,barang_id',
-            'barang.*.jumlah' => 'required|integer|min:1',
-        ];
-    
-        $validator = Validator::make($request->all(), $rules);
-    
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Validasi gagal.',
-                'msgField' => $validator->errors()
-            ]);
-        }
-    
-        DB::beginTransaction();
-        try {
-            // Membuat entri penjualan
-            $penjualan = PenjualanModel::create([
-                'user_id' => auth()->id(), // Menggunakan ID pengguna yang sedang login
-                'pembeli' => $request->pembeli,
-                'penjualan_tanggal' => $request->penjualan_tanggal,
-                'penjualan_kode' => 'P' . time() . strtoupper(Str::random(8)),
-            ]);
-    
-            $totalHarga = 0;
-    
-            foreach ($request->barang as $item) {
-                $barang = BarangModel::find($item['id']);
-    
-                // Memeriksa ketersediaan stok
-                if ($barang->stock_available < $item['jumlah']) {
-                    DB::rollBack();
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'Stok tidak cukup untuk ' . $barang->barang_nama
-                    ]);
-                }
-    
-                $hargaItem = $barang->harga_jual * $item['jumlah'];
-                $totalHarga += $hargaItem;
-    
-                // Mengurangi stok barang
-                $barang->decrement('stock_available', $item['jumlah']);
-    
-                // Menyimpan detail penjualan
-                $penjualan->penjualan_detail()->create([
-                    'barang_id' => $item['id'],
-                    'jumlah' => $item['jumlah'],
-                    'harga' => $hargaItem,
+    if (!$request->ajax() && !$request->wantsJson()) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Permintaan tidak valid.'
+        ]);
+    }
+
+    $rules = [
+        'pembeli' => 'required|string|max:255',
+        'penjualan_tanggal' => 'required|date',
+        'barang' => 'required|array|min:1',
+        'barang.*.id' => 'required|exists:m_barang,barang_id',
+        'barang.*.quantity' => 'required|integer|min:1', // disamakan dengan field dari request JS
+    ];
+
+    $validator = Validator::make($request->all(), $rules);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Validasi gagal.',
+            'msgField' => $validator->errors()
+        ]);
+    }
+
+    DB::beginTransaction();
+    try {
+        $penjualan = PenjualanModel::create([
+            'user_id' => auth()->id(),
+            'pembeli' => $request->pembeli,
+            'penjualan_tanggal' => $request->penjualan_tanggal,
+            'penjualan_kode' => 'P' . time() . strtoupper(Str::random(8)),
+        ]);
+
+        $totalHarga = 0;
+
+        foreach ($request->barang as $item) {
+            $barang = BarangModel::find($item['id']);
+
+            if ($barang->stock_available < $item['quantity']) {
+                DB::rollBack();
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Stok tidak cukup untuk ' . $barang->barang_nama
                 ]);
             }
-    
-            // Mengupdate total penjualan
-            $penjualan->update(['total' => $totalHarga]);
-    
-            DB::commit();
-            return response()->json([
-                'status' => true,
-                'message' => 'Penjualan berhasil disimpan',
-                'data' => [
-                    'penjualan_id' => $penjualan->penjualan_id,
-                    'penjualan_kode' => $penjualan->penjualan_kode,
-                    'total' => $totalHarga,
-                ]
-            ]);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'status' => false,
-                'message' => 'Penjualan gagal disimpan',
-                'error' => $e->getMessage()
+
+            $hargaItem = $barang->harga_jual * $item['quantity'];
+            $totalHarga += $hargaItem;
+
+            $barang->decrement('stock_available', $item['quantity']);
+
+            $penjualan->penjualan_detail()->create([
+                'barang_id' => $item['id'],
+                'jumlah' => $item['quantity'],
+                'harga' => $hargaItem,
             ]);
         }
+
+        $penjualan->update(['total' => $totalHarga]);
+
+        DB::commit();
+        return response()->json([
+            'status' => true,
+            'message' => 'Penjualan berhasil disimpan',
+            'data' => [
+                'penjualan_id' => $penjualan->penjualan_id,
+                'penjualan_kode' => $penjualan->penjualan_kode,
+                'total' => $totalHarga,
+            ]
+        ]);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return response()->json([
+            'status' => false,
+            'message' => 'Penjualan gagal disimpan',
+            'error' => $e->getMessage()
+        ]);
     }
+}
 
     public function edit(string $id)
     {
@@ -292,7 +288,7 @@ class PenjualanController extends Controller
             ];
         });
 
-        // dd($penjualanWithBarang);
+        ($penjualanWithBarang);
 
         $barang = BarangModel::select('barang_nama', 'harga_jual', 'barang_id')
             ->get()
