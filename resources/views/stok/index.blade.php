@@ -7,7 +7,7 @@
              <div class="card-tools">
                  <button onclick="modalAction('{{ url('/stok/import') }}')" class="btn btn-sm btn-info mt-1">Import Stok</button>
                  <a class="btn btn-sm btn-primary mt-1" href="{{ url('/stok/export_excel') }}"><i class="fa fa-file-excel"></i> Export Stok</a>
-                 <a class="btn btn-sm btn-warning mt-1" href="{{ url('/stok/export_pdf') }}"><i class="fa fa-file-pdf"></i> Export Stok</a>
+                 <a class="btn btn-sm btn-warning mt-1" href="{{ url('/stok/export_pdf') }}"><i class="fa fa-file-pdf"></i> Export Stok PDF</a>
  
                  <button onclick="modalAction('{{ url('stok/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
              </div>
