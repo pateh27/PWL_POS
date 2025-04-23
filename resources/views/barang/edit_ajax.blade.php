@@ -1,3 +1,4 @@
+
 @empty($barang)
      <div id="modal-master" class="modal-dialog modal-lg" role="document">
          <div class="modal-content">
@@ -17,7 +18,7 @@
          </div>
      </div>
  @else
-     <form action="{{ url('/barang/' . $barang->barang_id.'/update_ajax') }}" method="POST" id="form-edit">
+     <form action="{{ url('/barang/' . $barang->barang_id.'/update') }}" method="POST" id="form-edit">
      @csrf
      @method('PUT')
      <div id="modal-master" class="modal-dialog modal-lg" role="document">

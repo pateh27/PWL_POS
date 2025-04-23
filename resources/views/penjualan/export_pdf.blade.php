@@ -31,65 +31,62 @@
     
     <p>Tanggal Cetak: {{ \Carbon\Carbon::now()->format('d-m-Y H:i') }}</p>
 
-    @php $no = 1; $totalSemua = 0; @endphp
+    @php
+    $totalKeseluruhan = 0;
+@endphp
 
-    <table>
+<div class="flex-container">
+    <table class="border-all main-table">
         <thead>
             <tr>
-                <th>No</th>
+                <th class="text-center">No</th>
                 <th>Kode Penjualan</th>
-                <th>Tanggal</th>
+                <th>Tanggal Penjualan</th>
                 <th>Pembeli</th>
-                <th>User</th>
-                <th>Total</th>
+                <th class="text-right">Total Pembayaran</th>
+                <th class="text-center">Detail Penjualan</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($data as $d)
+            @foreach ($penjualan as $p)
                 @php
-                    $totalPerTransaksi = $d->penjualan_detail->sum(fn($item) => $item->harga);
-                    $totalSemua += $totalPerTransaksi;
+                    $totalTransaksi = $p->getTotalAmount();
+                    $totalKeseluruhan += $totalTransaksi;
                 @endphp
                 <tr>
-                    <td class="text-center">{{ $no++ }}</td>
-                    <td>{{ $d->penjualan_kode }}</td>
-                    <td>{{ \Carbon\Carbon::parse($d->penjualan_tanggal)->format('d-m-Y') }}</td>
-                    <td>{{ $d->pembeli }}</td>
-                    <td>{{ $d->user->name ?? '-' }}</td>
-                    <td class="text-right">Rp {{ number_format($totalPerTransaksi, 0, ',', '.') }}</td>
-                </tr>
-                <tr>
-                    <td colspan="6">
-                        <strong>Detail Barang:</strong>
-                        <table>
+                    <td class="text-center">{{ $loop->iteration }}</td>
+                    <td>{{ $p->penjualan_kode }}</td>
+                    <td>{{ \Carbon\Carbon::parse($p->penjualan_tanggal)->format('d-m-Y') }}</td>
+                    <td>{{ $p->pembeli }}</td>
+                    <td class="text-right">Rp {{ number_format($totalTransaksi , 0, ',', '.') }}</td>
+                    <td class="text-center">
+                        <table class="border-all detail-table">
                             <thead>
                                 <tr>
+                                    <th>Kode Barang</th>
                                     <th>Nama Barang</th>
-                                    <th>Jumlah</th>
-                                    <th>Harga</th>
-                                    <th>Subtotal</th>
+                                    <th class="text-right">Harga</th>
+                                    <th class="text-right">Jumlah</th>
+                                    <th class="text-right">Sub Total</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($d->penjualan_detail as $item)
-                                    <tr>
-                                        <td>{{ $item->barang->barang_nama ?? '-' }}</td>
-                                        <td class="text-center">{{ $item->jumlah }}</td>
-                                        <td class="text-right">Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
-                                        <td class="text-right">Rp {{ number_format($item->harga * $item->jumlah, 0, ',', '.') }}</td>
-                                    </tr>
+                                @foreach($p->details as $detail)
+                                <tr>
+                                    <td>{{ $detail->barang->barang_kode }}</td>
+                                    <td>{{ $detail->barang->barang_nama }}</td>
+                                    <td class="text-right">{{ number_format($detail->harga, 0, ',', '.') }}</td>
+                                    <td class="text-right">{{ $detail->jumlah }}</td>
+                                    <td class="text-right">{{ number_format($detail->harga * $detail->jumlah, 0, ',', '.') }}</td>
+                                </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </td>
                 </tr>
             @endforeach
-            <tr>
-                <td colspan="5" class="text-right"><strong>Total Keseluruhan</strong></td>
-                <td class="text-right"><strong>Rp {{ number_format($totalSemua, 0, ',', '.') }}</strong></td>
-            </tr>
         </tbody>
     </table>
-
+</div>
 </body>
 </html>
