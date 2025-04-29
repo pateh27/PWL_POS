@@ -6,11 +6,21 @@
  use Illuminate\Database\Eloquent\Model;
  use Illuminate\Database\Eloquent\Relations\BelongsTo;
  use Illuminate\Foundation\Auth\User as Authenticatable;
+ use Tymon\JWTAuth\Contracts\JWTSubject;
  
- class UserModel extends Authenticatable
+ class UserModel extends Authenticatable implements JWTSubject
  {
      use HasFactory;
- 
+     
+     public function getJWTIdentifier()
+     {
+         return $this->getKey();
+     }
+    
+     public function getJWTCustomClaims()
+     {
+         return [];
+     }
      protected $table = 'm_user'; 
      protected $primaryKey = 'user_id';
      protected $fillable = ['level_id', 'username', 'nama', 'password', 'created_at', 'updated_at', 'profile_picture'];
@@ -35,4 +45,5 @@
      {
          return $this->level->level_kode;
      }
+
  }
