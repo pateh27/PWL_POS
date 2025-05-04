@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\RegisterController;
+use App\Http\Controllers\Api\PenjualanDetailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,3 +48,9 @@ route::put('barangs/{barang}', [App\Http\Controllers\Api\BarangController::class
 route::delete('barangs/{barang}', [App\Http\Controllers\Api\BarangController::class, 'destroy']);
 
 Route::post('/register1', RegisterController::class)->name('register1');
+
+Route::get('details', [PenjualanDetailController::class, 'index']);
+Route::post('details', [PenjualanDetailController::class, 'store']);
+Route::get('details/{detail}', [PenjualanDetailController::class, 'show']);
+Route::put('details/{detail}', [PenjualanDetailController::class, 'update']);
+Route::delete('details/{detail}', [PenjualanDetailController::class, 'destroy']);
